@@ -113,12 +113,20 @@ const signin = async (req, res, next) => {
     });
 };
 
-const currentUser = (req, res, next) => {
+const currentUser =async (req, res, next) => {
 
 
-  console.log("#%%%%%",strategy)
-  jwtSecurityConfig
-    .strategy
+  
+  const usertoken = req.headers.authorization;
+  const token = usertoken.split(' ');
+  const decoded = jwt.verify(token[1], '86400');
+  let users = await userService.getSingleUser(decoded.id);
+
+  res.status(200).json({
+    status: "success",
+    data: users,
+    message: "Current user",
+  });
 };
 
 
